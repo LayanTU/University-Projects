@@ -27,7 +27,7 @@ The application is structured into interconnected, static HTML files to separate
 * `banner.jpeg` & `image1.jpg`: Local media assets rendered within the DOM.
 
 ## 📌 How to Run
-1. Clone the repository to your local machine using the terminal (`git clone <repo-url>`).
+1. Clone the repository to your local machine using the terminal (`git clone https://github.com/LayanTU/University-Projects/`).
 2. Navigate to the project folder.
 3. Open the `Home.html` file directly in any modern web browser (Chrome, Firefox, Edge).
 4. Use the navigation links at the top of the page to explore the connected files.
