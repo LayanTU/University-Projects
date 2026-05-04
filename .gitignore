@@ -1,0 +1,43 @@
+# Universal gitignore
+# C / C++ (OpenGL, Systems)
+*.o
+*.exe
+*.out
+*.dll
+*.so
+build/
+bin/
+
+# Java (OOP, Web Apps)
+*.class
+*.jar
+*.war
+
+# Python (Scripts, Tools)
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+.env
+
+# Web & Node.js
+node_modules/
+dist/
+
+# IDEs & Editor Workspaces
+.vscode/
+.idea/
+.vs/
+*.swp
+
+# Archives & Databases
+*.zip
+*.rar
+*.tar.gz
+*.sqlite
+*.db
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
