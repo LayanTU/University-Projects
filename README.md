@@ -1,6 +1,6 @@
 # 🎓 University Coding Projects
 
-Hi there! 👋 I am a Computer Science student currently learning software development and database design. 
+Hi there! I am a Computer Science student currently learning software development and database design. 
 
 This repository holds my main programming projects from my university classes. I am sharing these to show my hands-on practice with writing code, structuring data, and building applications from scratch.
 
