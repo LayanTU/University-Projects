@@ -18,14 +18,14 @@ void drawDoor() {
 
     //Door handle - written like a rotated T
     glColor3ub(128, 128, 128); //gray
-    glBegin(GL_QUADS);
-        //Vertical part - T head
-       glVertex2i(3, -3); glVertex2i(4, -3); 
-       glVertex2i(4, -1); glVertex2i(3, -1);
+    glLineWidth(6);
     
-       //Horizontal part - T base
-       glVertex2i(1, -2); glVertex2i(3, -2); 
-       glVertex2i(3, -1); glVertex2i(1, -1);
+    glBegin(GL_LINES);
+    //Vertical part - T head
+    glVertex2i(3, 0); glVertex2i(3, -2);
+    
+    //Horizontal part - T base 
+    glVertex2i(1, -1); glVertex2i(3, -1);
     glEnd();
 }
 
