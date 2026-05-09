@@ -63,8 +63,6 @@ void drawCeiling() {
     glVertex2i(36, 25); glVertex2i(24, 25);
     glEnd();
 }
-
-// FUTURE CHANGES !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 void mouse(int button, int state, int x, int y) {
     if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
         lightOn = !lightOn;
@@ -341,60 +339,91 @@ void drawFloor() {
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+    //floor and students' chairs - change coordinates and disable depth test 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-5.5, 5.5, -3.0, 4.0); 
+    
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glDisable(GL_DEPTH_TEST); 
+    
+    glTranslatef(0.0f, -0.8f, 0.0f);
+    drawFloor();
+    drawChairs();
+
+    //ceiling -change position and coordinates
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-50.0, 50.0, -25.0, 25.0); 
+    
+    glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-    //ceiling
+    glPushMatrix();
+    glTranslatef(0.0f, 2.0f, 0.0f); 
     drawCeiling();
+    glPopMatrix();
+
+    //smaller doors 
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-75.0, 75.0, -37.5, 37.5);    
+    
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
 
     //left door
     glPushMatrix(); 
-    glTranslatef(-35, 0, 0);
+    glTranslatef(-35, 15, 0);
     drawDoor();
     glPopMatrix();
 
     //right door
     glPushMatrix();
-    glTranslatef(35, 0, 0);
+    glTranslatef(35, 15, 0);
     drawDoor();
     glPopMatrix();
 
-    //whiteboard
+    //whiteboard - change coordinates again
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-60.0, 60.0, -30.0, 30.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glTranslatef(0.0, 9.0, 0.0);
     drawMyWhiteboard();
 
-    //teacher's chair - 3D
-    // Position camera to view the chair from an angle
-    gluLookAt(3.0, 2.0, 5.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-    glRotatef(25, 0, 1, 0); // Rotate for better perspective
+    //3D chair - change coordinates and enable depth test
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0, 2.0, 1.0, 100.0);
+    
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glEnable(GL_DEPTH_TEST);
+
+    // Position camera to view the chair rom an angle
+    gluLookAt(0.0, 3.0, 7.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
+    glTranslatef(2.5, -1.4, -3.0); 
+    glRotatef(15, 0, 1, 0); 
+    glScalef(0.6, 0.6, 0.6);
     drawChair();
-    glutSwapBuffers();
-
-    //floor and students' chairs
-    drawFloor();
-    drawChairs();
-
-    glFlush();  
+   
+    glutSwapBuffers(); //instead of glFlush();
 }
 
 void init() {
     glEnable(GL_DEPTH_TEST);
-    glClearColor(172, 147, 98, 1); //beige
-    gluOrtho2D(-50, 50, -25, 25);
-    
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluPerspective(45.0, 2.0, 1.0, 100.0);
-    glMatrixMode(GL_MODELVIEW);
+    glClearColor(0.96f, 0.93f, 0.88f, 1.0f); //beige
 }
 
+//projection is in display(); 
 void reshape(int w, int h) {
     glViewport(0, 0, w, h);
-
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(-10, 10, -5, 5);
-
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
 }
 
 int main(int argc, char **argv) {
@@ -406,6 +435,7 @@ int main(int argc, char **argv) {
     
     init();
     glutDisplayFunc(display);
+
     glutMouseFunc(mouse);
     glutKeyboardFunc(myKeyboard); // تسجيل دالة لوحة المفاتيح للتفاعل
     glutReshapeFunc(reshape);
