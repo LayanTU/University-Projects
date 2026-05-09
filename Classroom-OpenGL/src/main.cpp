@@ -3,8 +3,8 @@
 #include <GL/freeglut.h>
 #include <stdlib.h>
 
-// متغير عام للتحكم في حالة السبورة (تفاعلي)
-bool isBoardWritten = false;
+// متغير حالة للنظام التفاعلي يحدد ما إذا كانت السبورة تحتوي على كتابة أم لا
+bool showScribble = false;
 
 bool lightOn = true;
 
@@ -97,64 +97,62 @@ void drawDoor() {
     glVertex2i(1, -1); glVertex2i(3, -1);
     glEnd();
 }
-
-// دالة رسم السبورة البيضاء (جزئيتك الخاصة المعتمدة على المحاضرات)
-void drawMyWhiteboard() {
-    // 1. رسم سطح السبورة (Whiteboard Surface)
-    glColor3ub(255, 255, 255); // اللون الأبيض باستخدام ub كما ورد في المحاضرة 2
-    glBegin(GL_QUADS); 
-        glVertex2i(-12, -4); glVertex2i( 12, -4);
-        glVertex2i( 12,  6); glVertex2i(-12,  6);
-    glEnd();
-
-    // 2. رسم الإطار الخارجي (The Frame)
-    glLineWidth(4.0); // تحديد سماكة الخط
-    glColor3f(0.4f, 0.4f, 0.4f); // لون رمادي للإطار
-    glBegin(GL_LINE_LOOP); // حلقة مغلقة لتمثيل الإطار
-        glVertex2i(-12, -4); glVertex2i( 12, -4);
-        glVertex2i( 12,  6); glVertex2i(-12,  6);
-    glEnd();
-
-    // 3. إضافة تفاصيل إبداعية (سلك التحكم العلوي من الصورة المرفقة)
-    glLineWidth(2.0);
-    glBegin(GL_LINES); 
-        glVertex2i(0, 6); glVertex2i(0, 12);
-    glEnd();
-
-    // 4. حامل الأقلام في الأسفل
-    glColor3f(0.6f, 0.6f, 0.6f);
-    glBegin(GL_QUADS);
-        glVertex2i(-4, -5); glVertex2i( 4, -5);
-        glVertex2i( 4, -4); glVertex2i(-4, -4);
-    glEnd();
-
-    // 5. النظام التفاعلي (Interactive System - المهمة 4)
-    // رسم خربشة زرقاء على السبورة عند الضغط على مفتاح التفاعل
-    if (isBoardWritten) {
-        glColor3f(0.0f, 0.0f, 1.0f); // لون أزرق للكتابة
-        glLineWidth(3.0);
-        glBegin(GL_LINES); 
-            glVertex2i(-8, 2);  glVertex2i(8, 2);
-            glVertex2i(-8, -1); glVertex2i(2, -1);
-        glEnd();
-    }
+ 
+// دالة رسم السبورة
+void drawWhiteboard() {
+   glColor3f(1.0f, 1.0f, 1.0f);
+   glBegin(GL_QUADS);
+       glVertex2i(-12, -4);
+       glVertex2i( 12, -4);
+       glVertex2i( 12,  8);
+       glVertex2i(-12,  8);
+   glEnd();
+ 
+   // 2. رسم الإطار (The Frame)
+   glLineWidth(5.0); // سماكة الخط للإطار
+   glColor3f(0.3f, 0.3f, 0.3f); // رمادي غامق للإطار
+   glBegin(GL_LINE_LOOP);
+       glVertex2i(-12, -4);
+       glVertex2i( 12, -4);
+       glVertex2i( 12,  8);
+       glVertex2i(-12,  8);
+   glEnd();
+ 
+   // 3. رسم حامل الأقلام في الأسفل (Creative Detail)
+   glColor3f(0.5f, 0.5f, 0.5f);
+   glBegin(GL_QUADS);
+       glVertex2i(-5, -5);
+       glVertex2i( 5, -5);
+       glVertex2i( 5, -4);
+       glVertex2i(-5, -4);
+   glEnd();
+ 
+   // 4. تنفيذ التفاعل (Interaction Logic)
+   if (showScribble) {
+       glColor3f(0.0f, 0.2f, 0.8f); // لون حبر أزرق
+       glLineWidth(3.0);
+       glBegin(GL_LINES);
+           // رسم خطوط بسيطة تمثل كتابة أو رسماً توضيحياً
+           glVertex2i(-8, 4);  glVertex2i(8, 4);
+           glVertex2i(-8, 1);  glVertex2i(4, 1);
+           glVertex2i(-8, -2); glVertex2i(0, -2);
+       glEnd();
+   }
 }
-
-// دالة التفاعل مع لوحة المفاتيح
-void myKeyboard(unsigned char theKey, int mouseX, int mouseY) {
-    switch (theKey) {
-        case 'b':
-        case 'B':
-            isBoardWritten = !isBoardWritten; // تبديل حالة الكتابة (تفاعل)
-            glutPostRedisplay(); // إعادة الرسم لتحديث المشهد فوراً
-            break;
-        case 'e':
-        case 'E':
-            exit(0); // إنهاء البرنامج
-            break;
-    }
+ 
+// دالة التفاعل عبر لوحة المفاتيح
+void keyboard(unsigned char key, int x, int y) {
+   // عند الضغط على مفتاحb' ' أو ' B 'يتم تبديل حالة السبورة
+   if (key == 'b' || key == 'B') {
+       showScribble = !showScribble;
+       glutPostRedisplay(); // إعادة الرسم لتحديث المشهد
+   }
+   // مفتاح  'e' للخروج من البرنامج
+   if (key == 'e' || key == 'E') {
+       exit(0);
+   }
 }
-
+ 
 void drawChair() {
     // Color settings (Dark grey as seen in image.png)
     glColor3f(0.2f, 0.2f, 0.2f);
@@ -225,8 +223,7 @@ void quad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, 
     glEnd();
 }
 
-void drawChair2D(float x, float y, float scale)
-{
+void drawChair2D(float x, float y, float scale) {
     glPushMatrix();
     glTranslatef(x, y, 0.0f);
     glScalef(scale, scale, 1.0f);
@@ -395,7 +392,7 @@ void display() {
     glLoadIdentity();
 
     glTranslatef(0.0, 9.0, 0.0);
-    drawMyWhiteboard();
+    drawWhiteboard();
 
     //3D chair - change coordinates and enable depth test
     glMatrixMode(GL_PROJECTION);
@@ -437,7 +434,7 @@ int main(int argc, char **argv) {
     glutDisplayFunc(display);
 
     glutMouseFunc(mouse);
-    glutKeyboardFunc(myKeyboard); // تسجيل دالة لوحة المفاتيح للتفاعل
+    glutKeyboardFunc(keyboard); // تسجيل دالة لوحة المفاتيح للتفاعل
     glutReshapeFunc(reshape);
 
     glutMainLoop();

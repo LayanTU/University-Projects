@@ -1,92 +1,93 @@
-//white board
+//whiteboard
 #include <GL/glut.h>
 #include <stdlib.h>
-
-// متغير عام للتحكم في حالة السبورة (تفاعلي)
-bool isBoardWritten = false;
-
-// دالة رسم السبورة البيضاء (جزئيتك الخاصة المعتمدة على المحاضرات)
-void drawMyWhiteboard() {
-    // 1. رسم سطح السبورة (Whiteboard Surface)
-    glColor3ub(255, 255, 255); // اللون الأبيض باستخدام ub كما ورد في المحاضرة 2
-    glBegin(GL_QUADS); 
-        glVertex2i(-12, -4); glVertex2i( 12, -4);
-        glVertex2i( 12,  6); glVertex2i(-12,  6);
-    glEnd();
-
-    // 2. رسم الإطار الخارجي (The Frame)
-    glLineWidth(4.0); // تحديد سماكة الخط
-    glColor3f(0.4f, 0.4f, 0.4f); // لون رمادي للإطار
-    glBegin(GL_LINE_LOOP); // حلقة مغلقة لتمثيل الإطار
-        glVertex2i(-12, -4); glVertex2i( 12, -4);
-        glVertex2i( 12,  6); glVertex2i(-12,  6);
-    glEnd();
-
-    // 3. إضافة تفاصيل إبداعية (سلك التحكم العلوي من الصورة المرفقة)
-    glLineWidth(2.0);
-    glBegin(GL_LINES); 
-        glVertex2i(0, 6); glVertex2i(0, 12);
-    glEnd();
-
-    // 4. حامل الأقلام في الأسفل
-    glColor3f(0.6f, 0.6f, 0.6f);
-    glBegin(GL_QUADS);
-        glVertex2i(-4, -5); glVertex2i( 4, -5);
-        glVertex2i( 4, -4); glVertex2i(-4, -4);
-    glEnd();
-
-    // 5. النظام التفاعلي (Interactive System - المهمة 4)
-    // رسم خربشة زرقاء على السبورة عند الضغط على مفتاح التفاعل
-    if (isBoardWritten) {
-        glColor3f(0.0f, 0.0f, 1.0f); // لون أزرق للكتابة
-        glLineWidth(3.0);
-        glBegin(GL_LINES); 
-            glVertex2i(-8, 2);  glVertex2i(8, 2);
-            glVertex2i(-8, -1); glVertex2i(2, -1);
-        glEnd();
-    }
+ 
+// متغير حالة للنظام التفاعلي يحدد ما إذا كانت السبورة تحتوي على كتابة أم لا
+bool showScribble = false;
+ 
+// دالة رسم السبورة
+void drawWhiteboard() {
+   glColor3f(1.0f, 1.0f, 1.0f);
+   glBegin(GL_QUADS);
+       glVertex2i(-12, -4);
+       glVertex2i( 12, -4);
+       glVertex2i( 12,  8);
+       glVertex2i(-12,  8);
+   glEnd();
+ 
+   // 2. رسم الإطار (The Frame)
+   glLineWidth(5.0); // سماكة الخط للإطار
+   glColor3f(0.3f, 0.3f, 0.3f); // رمادي غامق للإطار
+   glBegin(GL_LINE_LOOP);
+       glVertex2i(-12, -4);
+       glVertex2i( 12, -4);
+       glVertex2i( 12,  8);
+       glVertex2i(-12,  8);
+   glEnd();
+ 
+   // 3. رسم حامل الأقلام في الأسفل (Creative Detail)
+   glColor3f(0.5f, 0.5f, 0.5f);
+   glBegin(GL_QUADS);
+       glVertex2i(-5, -5);
+       glVertex2i( 5, -5);
+       glVertex2i( 5, -4);
+       glVertex2i(-5, -4);
+   glEnd();
+ 
+   // 4. تنفيذ التفاعل (Interaction Logic)
+   if (showScribble) {
+       glColor3f(0.0f, 0.2f, 0.8f); // لون حبر أزرق
+       glLineWidth(3.0);
+       glBegin(GL_LINES);
+           // رسم خطوط بسيطة تمثل كتابة أو رسماً توضيحياً
+           glVertex2i(-8, 4);  glVertex2i(8, 4);
+           glVertex2i(-8, 1);  glVertex2i(4, 1);
+           glVertex2i(-8, -2); glVertex2i(0, -2);
+       glEnd();
+   }
 }
-
+ 
 // دالة العرض الأساسية
 void display() {
-    glClear(GL_COLOR_BUFFER_BIT); // مسح الشاشة
-    drawMyWhiteboard();
-    glFlush(); // إرسال الرسم للشاشة
+   // مسح الشاشة بلون خلفية القاعة (رمادي فاتح جداً)
+   glClearColor(0.95f, 0.95f, 0.95f, 1.0f);
+   glClear(GL_COLOR_BUFFER_BIT);
+ 
+   drawWhiteboard();
+ 
+   glFlush(); // التأكد من عرض الرسومات
 }
-
-// دالة التفاعل مع لوحة المفاتيح
-void myKeyboard(unsigned char theKey, int mouseX, int mouseY) {
-    switch (theKey) {
-        case 'b':
-        case 'B':
-            isBoardWritten = !isBoardWritten; // تبديل حالة الكتابة (تفاعل)
-            glutPostRedisplay(); // إعادة الرسم لتحديث المشهد فوراً
-            break;
-        case 'e':
-        case 'E':
-            exit(0); // إنهاء البرنامج
-            break;
-    }
+ 
+// دالة التفاعل عبر لوحة المفاتيح
+void keyboard(unsigned char key, int x, int y) {
+   // عند الضغط على مفتاحb' ' أو ' B 'يتم تبديل حالة السبورة
+   if (key == 'b' || key == 'B') {
+       showScribble = !showScribble;
+       glutPostRedisplay(); // إعادة الرسم لتحديث المشهد
+   }
+   // مفتاح  'e' للخروج من البرنامج
+   if (key == 'e' || key == 'E') {
+       exit(0);
+   }
 }
-
-// دالة التهيئة الأولية (تطابق معايير المحاضرة 2 والمحاضرة 5)
+ 
+// دالة التهيئة
 void init() {
-    glClearColor(0.9f, 0.9f, 0.9f, 0.0f); // لون خلفية النافذة (رمادي فاتح)
-    gluOrtho2D(-20.0, 20.0, -20.0, 20.0); // ضبط حدود الرؤية وعرض الشاشة ثنائية الأبعاد
+   // ضبط حدود الرؤية في نظام الإحداثيات العالمي
+   gluOrtho2D(-20, 20, -20, 20);
 }
-
-//الدالة الرئيسية
+ 
 int main(int argc, char** argv) {
-    glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB); 
-    glutInitWindowSize(600, 600); // حجم نافذة العرض
-    glutInitWindowPosition(100, 100); 
-    glutCreateWindow("Taif University Landmark - Whiteboard Module"); 
-    
-    init(); // استدعاء دالة التهيئة
-    glutDisplayFunc(display); // تسجيل دالة الرسم
-    glutKeyboardFunc(myKeyboard); // تسجيل دالة لوحة المفاتيح للتفاعل
-    
-    glutMainLoop(); // الدخول في حلقة الانتظار اللانهائية لتشغيل الواجهة
-    return 0;
+   glutInit(&argc, argv);
+   glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+   glutInitWindowSize(600, 600);
+   glutInitWindowPosition(100, 100);
+   glutCreateWindow("Taif University Project - Whiteboard Module");
+ 
+   init();
+   glutDisplayFunc(display);
+   glutKeyboardFunc(keyboard); // تسجيل دالة التفاعل
+ 
+   glutMainLoop();
+   return 0;
 }
