@@ -333,6 +333,57 @@ void drawFloor() {
     glEnd();
 }
 
+void DrawPodium() {
+    glColor3ub(139, 69, 19);
+    glBegin(GL_QUADS);
+        glVertex2i(-1, -13); glVertex2i(-5, -10);
+        glVertex2i(-5, 0); glVertex2i(-1, 0);
+    glEnd();
+
+    glColor3ub(160, 82, 45);
+    glBegin(GL_QUADS);
+        glVertex2i(4, -13); glVertex2i(-1, -13);
+        glVertex2i(-1, 0); glVertex2i(4, 0);
+    glEnd();
+
+    glColor3ub(100, 50, 18); 
+    glBegin(GL_QUADS);
+        glVertex2i(-1, -13); glVertex2i(-5, -10);
+        glVertex2i(-6, -11); glVertex2i(-2, -14);
+    glEnd();
+
+    glColor3ub(139, 69, 19);
+    glBegin(GL_POLYGON);
+        glVertex2i(2, 0); glVertex2i(-6, 0);
+        glVertex2i(-6, 5); glVertex2i(0, 7);
+        glVertex2i(2, 7);
+    glEnd();
+
+    glColor3ub(190, 115, 75);
+    glBegin(GL_POLYGON);
+        glVertex2i(-2, -2); glVertex2i(-2, 4); 
+        glVertex2i(3, 6); glVertex2i(5, 6); 
+        glVertex2i(5, -2);
+    glEnd();
+
+    glColor3ub(255, 245, 238);
+    glBegin(GL_QUADS);
+        glVertex2i(1, -1); glVertex2i(1, 2);
+        glVertex2i(4, 2); glVertex2i(4, -1);
+    glEnd();
+
+    glColor3ub(218, 165, 32);
+    glLineWidth(5.0);
+    glBegin(GL_LINES);
+        glVertex2f(2.0, 0.3); glVertex2f(2.0, 1.3);
+        glVertex2f(1.2, 1.4); glVertex2f(2.8, 1.4);
+    glEnd();
+
+    glBegin(GL_LINE_STRIP);
+        glVertex2f(2.5, 1.0); glVertex2f(2.5, 0.3);
+        glVertex2f(3.6, 0.3); glVertex2f(3.6, 1.0);
+    glEnd();
+}
 
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -394,6 +445,17 @@ void display() {
     glTranslatef(0.0, 9.0, 0.0);
     drawWhiteboard();
 
+    //podium - change coordinates again
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-60.0, 60.0, -30.0, 30.0);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+    glTranslatef(18, 3, 0);
+    glScalef(0.6, 0.6, 0.6);
+    DrawPodium();
+
     //3D chair - change coordinates and enable depth test
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
@@ -405,11 +467,37 @@ void display() {
 
     // Position camera to view the chair rom an angle
     gluLookAt(0.0, 3.0, 7.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0);
-    glTranslatef(2.5, -1.4, -3.0); 
+    glTranslatef(1.2, -1.4, -3.0); 
     glRotatef(15, 0, 1, 0); 
     glScalef(0.6, 0.6, 0.6);
     drawChair();
    
+    // Dark transparent layer
+    if (!lightOn) {
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1, 1, -1, 1);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glDisable(GL_DEPTH_TEST);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glColor4f(0.0f, 0.0f, 0.0f, 0.6f);
+
+    glBegin(GL_QUADS);
+        glVertex2f(-1, -1);
+        glVertex2f( 1, -1);
+        glVertex2f( 1,  1);
+        glVertex2f(-1,  1);
+    glEnd();
+
+    glDisable(GL_BLEND);
+    }
+
     glutSwapBuffers(); //instead of glFlush();
 }
 
