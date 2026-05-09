@@ -1,14 +1,10 @@
 //chairs and floors
-
 #include <GL/glut.h>
 
-void quad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4)
-{
+void quad(float x1, float y1, float x2, float y2, float x3, float y3, float x4, float y4) {
     glBegin(GL_QUADS);
-    glVertex2f(x1, y1);
-    glVertex2f(x2, y2);
-    glVertex2f(x3, y3);
-    glVertex2f(x4, y4);
+    glVertex2f(x1, y1); glVertex2f(x2, y2);
+    glVertex2f(x3, y3); glVertex2f(x4, y4);
     glEnd();
 }
 
@@ -47,8 +43,8 @@ void drawChair2D(float x, float y, float scale)
 
     glPopMatrix();
 }
-void drawChairs()
-{
+
+void drawChairs() {
     drawChair2D(-3.0f, -2.8f, 1.25f);
     drawChair2D(-1.5f, -2.8f, 1.25f);
     drawChair2D(0.0f, -2.8f, 1.25f);
@@ -65,29 +61,22 @@ void drawChairs()
     drawChair2D(1.5f, -0.2f, 0.70f);
 }
 
-void drawFloor()
-{
+void drawFloor() {
+
     glColor3f(0.9608f, 0.9294f, 0.8784f);
     glBegin(GL_POLYGON);
-    glVertex2f(-2.96f, 1.47f);
-    glVertex2f(2.91f, 1.47f);
-    glVertex2f(4.96f, -0.99f);
-    glVertex2f(4.96f, -3.66f);
-    glVertex2f(-5.00f, -3.66f);
-    glVertex2f(-5.00f, -0.99f);
+    glVertex2f(-2.96f, 1.47f); glVertex2f(2.91f, 1.47f);
+    glVertex2f(4.96f, -0.99f); glVertex2f(4.96f, -3.66f);
+    glVertex2f(-5.00f, -3.66f); glVertex2f(-5.00f, -0.99f);
     glEnd();
 
     glColor3f(0.7608f, 0.6902f, 0.6118f);
     glLineWidth(1.0f);
-
     glBegin(GL_LINES);
-
     glVertex2f(-2.96f, 1.47f); glVertex2f(2.91f, 1.47f);
     glVertex2f(-2.96f, 1.47f); glVertex2f(-5.00f, -0.99f);
     glVertex2f(2.91f, 1.47f); glVertex2f(4.96f, -0.99f);
-
     glVertex2f(-3.15f, 1.25f); glVertex2f(3.11f, 1.25f);
-
     glVertex2f(-2.37f, 1.47f); glVertex2f(-2.53f, 1.25f);
     glVertex2f(-1.79f, 1.47f); glVertex2f(-1.98f, 1.25f);
     glVertex2f(-1.20f, 1.47f); glVertex2f(-1.27f, 1.25f);
@@ -97,40 +86,29 @@ void drawFloor()
     glVertex2f(1.16f, 1.47f); glVertex2f(1.23f, 1.25f);
     glVertex2f(1.75f, 1.47f); glVertex2f(1.93f, 1.25f);
     glVertex2f(2.33f, 1.47f); glVertex2f(2.49f, 1.25f);
-
     glVertex2f(-3.37f, 1.00f); glVertex2f(-2.10f, 1.00f);
     glVertex2f(2.05f, 1.00f); glVertex2f(3.32f, 1.00f);
-
     glVertex2f(-3.60f, 0.73f); glVertex2f(-2.25f, 0.73f);
     glVertex2f(2.20f, 0.73f); glVertex2f(3.55f, 0.73f);
-
     glVertex2f(-3.90f, 0.40f); glVertex2f(-2.42f, 0.40f);
     glVertex2f(-3.90f, 0.39f); glVertex2f(-2.42f, 0.39f);
-
     glVertex2f(2.37f, 0.40f); glVertex2f(3.85f, 0.40f);
     glVertex2f(2.37f, 0.39f); glVertex2f(3.85f, 0.39f);
-
     glVertex2f(-2.37f, 1.47f); glVertex2f(-5.00f, -2.30f);
     glVertex2f(-1.79f, 1.47f); glVertex2f(-2.48f, 0.34f);
-
     glVertex2f(2.32f, 1.47f); glVertex2f(4.96f, -2.32f);
     glVertex2f(1.75f, 1.47f); glVertex2f(2.43f, 0.34f);
-
     glVertex2f(-2.48f, 0.34f); glVertex2f(2.43f, 0.34f);
     glVertex2f(-2.48f, 0.33f); glVertex2f(2.43f, 0.33f);
     glVertex2f(-2.48f, 0.34f); glVertex2f(-2.44f, 0.20f);
     glVertex2f(2.43f, 0.34f); glVertex2f(2.39f, 0.20f);
-
-
     glVertex2f(-4.23f, 0.01f); glVertex2f(4.18f, 0.01f);
     glVertex2f(-4.63f, -0.44f); glVertex2f(4.58f, -0.44f);
     glVertex2f(-5.00f, -0.99f); glVertex2f(4.96f, -0.99f);
     glVertex2f(-5.00f, -1.67f); glVertex2f(4.96f, -1.67f);
     glVertex2f(-5.00f, -2.53f); glVertex2f(4.96f, -2.53f);
-
     glVertex2f(-5.00f, -3.65f); glVertex2f(4.96f, -3.65f);
     glVertex2f(-5.00f, -3.66f); glVertex2f(4.96f, -3.66f);
-
     glVertex2f(-2.44f, 0.20f); glVertex2f(-4.45f, -3.66f);
     glVertex2f(-1.64f, 0.20f); glVertex2f(-2.98f, -3.66f);
     glVertex2f(-0.83f, 0.20f); glVertex2f(-1.50f, -3.66f);
@@ -138,12 +116,10 @@ void drawFloor()
     glVertex2f(0.78f, 0.20f); glVertex2f(1.46f, -3.66f);
     glVertex2f(1.59f, 0.20f); glVertex2f(2.93f, -3.66f);
     glVertex2f(2.39f, 0.20f); glVertex2f(4.40f, -3.66f);
-
     glEnd();
 }
 
-void display()
-{
+void display() {
     glClear(GL_COLOR_BUFFER_BIT);
     glLoadIdentity();
 
@@ -153,25 +129,22 @@ void display()
     glFlush();
 }
 
-void init()
-{
+void init() {
     glClearColor(0.98f, 0.96f, 0.94f, 1.0f);
 }
 
-void reshape(int w, int h)
-{
+void reshape(int w, int h) {
     glViewport(0, 0, w, h);
 
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluOrtho2D(-5, 5, -5, 5);
+    gluOrtho2D(-10, 10, -5, 5);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 }
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     glutInitWindowSize(1024, 768);

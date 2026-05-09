@@ -1,5 +1,5 @@
 //ceiling
-#include <GL/freeglut.h>
+#include <GL/freeglut.h> 
 
 bool lightOn = true;
 

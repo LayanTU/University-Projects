@@ -33,6 +33,7 @@ void drawChair() {
     glScalef(0.1f, 0.5f, 0.1f); // Vertical support
     glutSolidCube(1.0);
     glPopMatrix();
+    
     glPushMatrix();
     glTranslatef(0.55f, 0.55f, 0.0f);
     glScalef(0.2f, 0.05f, 0.5f); // Top handle
@@ -45,6 +46,7 @@ void drawChair() {
     glScalef(0.1f, 0.5f, 0.1f); // Vertical support
     glutSolidCube(1.0);
     glPopMatrix();
+    
     glPushMatrix();
     glTranslatef(-0.55f, 0.55f, 0.0f);
     glScalef(0.2f, 0.05f, 0.5f); // Top handle
@@ -80,7 +82,7 @@ void init() {
     glClearColor(0.8f, 0.8f, 0.8f, 1.0f); // Light grey background
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    gluPerspective(45.0, 1.0, 1.0, 100.0);
+    gluPerspective(45.0, 2.0, 1.0, 100.0);
     glMatrixMode(GL_MODELVIEW);
 }
 

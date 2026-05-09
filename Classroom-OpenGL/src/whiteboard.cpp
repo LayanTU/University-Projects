@@ -10,36 +10,29 @@ void drawMyWhiteboard() {
     // 1. رسم سطح السبورة (Whiteboard Surface)
     glColor3ub(255, 255, 255); // اللون الأبيض باستخدام ub كما ورد في المحاضرة 2
     glBegin(GL_QUADS); 
-        glVertex2i(-12, -4); 
-        glVertex2i( 12, -4);
-        glVertex2i( 12,  6);
-        glVertex2i(-12,  6);
+        glVertex2i(-12, -4); glVertex2i( 12, -4);
+        glVertex2i( 12,  6); glVertex2i(-12,  6);
     glEnd();
 
     // 2. رسم الإطار الخارجي (The Frame)
     glLineWidth(4.0); // تحديد سماكة الخط
     glColor3f(0.4f, 0.4f, 0.4f); // لون رمادي للإطار
     glBegin(GL_LINE_LOOP); // حلقة مغلقة لتمثيل الإطار
-        glVertex2i(-12, -4);
-        glVertex2i( 12, -4);
-        glVertex2i( 12,  6);
-        glVertex2i(-12,  6);
+        glVertex2i(-12, -4); glVertex2i( 12, -4);
+        glVertex2i( 12,  6); glVertex2i(-12,  6);
     glEnd();
 
     // 3. إضافة تفاصيل إبداعية (سلك التحكم العلوي من الصورة المرفقة)
     glLineWidth(2.0);
     glBegin(GL_LINES); 
-        glVertex2i(0, 6);
-        glVertex2i(0, 12);
+        glVertex2i(0, 6); glVertex2i(0, 12);
     glEnd();
 
     // 4. حامل الأقلام في الأسفل
     glColor3f(0.6f, 0.6f, 0.6f);
     glBegin(GL_QUADS);
-        glVertex2i(-4, -5);
-        glVertex2i( 4, -5);
-        glVertex2i( 4, -4);
-        glVertex2i(-4, -4);
+        glVertex2i(-4, -5); glVertex2i( 4, -5);
+        glVertex2i( 4, -4); glVertex2i(-4, -4);
     glEnd();
 
     // 5. النظام التفاعلي (Interactive System - المهمة 4)
