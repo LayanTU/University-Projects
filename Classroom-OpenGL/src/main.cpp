@@ -2,14 +2,22 @@
 #include <GL/glut.h>
 #include <GL/freeglut.h>
 #include <stdlib.h>
+#include <iostream>
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h" // تأكدي أن هذا الملف موجود في مجلد المشروع
+
+// معرفات التكستشر للصور الثلاث
+GLuint texStand, texWalk, texBook;
+float x_pos = -0.5f;    // نقطة البداية (يسار الشاشة)
+int state = 0;          // 0: واقفة (s1)، 1: تمشي (s2)، 2: وقفت بالوسط (s1)، 3: ماسكة كتاب (s3)
 
 // متغير حالة للنظام التفاعلي يحدد ما إذا كانت السبورة تحتوي على كتابة أم لا
 bool showScribble = false;
 
 bool lightOn = true;
 
-void drawCeiling() {
-    
+void drawCeiling() {  
     glColor3ub(220, 220, 220);
     glBegin(GL_QUADS);
     glVertex2i(-45, 15); glVertex2i(45, 15);
@@ -62,12 +70,6 @@ void drawCeiling() {
     glVertex2i(20, 23); glVertex2i(32, 23);
     glVertex2i(36, 25); glVertex2i(24, 25);
     glEnd();
-}
-void mouse(int button, int state, int x, int y) {
-    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
-        lightOn = !lightOn;
-        glutPostRedisplay();
-    }
 }
 
 void drawDoor() {
@@ -139,20 +141,7 @@ void drawWhiteboard() {
        glEnd();
    }
 }
- 
-// دالة التفاعل عبر لوحة المفاتيح
-void keyboard(unsigned char key, int x, int y) {
-   // عند الضغط على مفتاحb' ' أو ' B 'يتم تبديل حالة السبورة
-   if (key == 'b' || key == 'B') {
-       showScribble = !showScribble;
-       glutPostRedisplay(); // إعادة الرسم لتحديث المشهد
-   }
-   // مفتاح  'e' للخروج من البرنامج
-   if (key == 'e' || key == 'E') {
-       exit(0);
-   }
-}
- 
+
 void drawChair() {
     // Color settings (Dark grey as seen in image.png)
     glColor3f(0.2f, 0.2f, 0.2f);
@@ -276,7 +265,6 @@ void drawChairs() {
 }
 
 void drawFloor() {
-
     glColor3f(0.9608f, 0.9294f, 0.8784f);
     glBegin(GL_POLYGON);
     glVertex2f(-2.96f, 1.47f); glVertex2f(2.91f, 1.47f);
@@ -423,6 +411,30 @@ void DrawPodium() {
     glEnd();
 }
 
+// دالة موحدة لتحميل الصور (تدعم الشفافية)
+GLuint loadTexture(const char* path) {
+    GLuint id;
+    int w, h, c;
+    stbi_set_flip_vertically_on_load(true);
+    // نطلب تحميل 4 قنوات (RGBA) لضمان تحميل قناة الشفافية
+    unsigned char* data = stbi_load(path, &w, &h, &c, 4);
+    if (data) {
+        glGenTextures(1, &id);
+        glBindTexture(GL_TEXTURE_2D, id);
+
+        // إعدادات التكستشر لضمان ظهور البكسلات حادة (Pixel Art style)
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        // تحميل البيانات بصيغة GL_RGBA للشفافية
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
+        stbi_image_free(data);
+        return id;
+    }
+    std::cout << "FAILED to load texture at: " << path << std::endl;
+    return 0;
+}
+
 void display() {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         
@@ -509,6 +521,47 @@ void display() {
     glRotatef(15, 0, 1, 0); 
     glScalef(0.6, 0.6, 0.6);
     drawChair();
+
+    //teacher - change coordinates and disable depth test
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-1.0, 1.0, -1.0, 1.0); 
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glDisable(GL_DEPTH_TEST); 
+    
+    // تفعيل التكستشر
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glColor3f(1.0f, 1.0f, 1.0f); //change color so it's not affected by the chair's color
+
+    // اختيار الصورة بناءً على الحالة
+    if (state == 0 || state == 2) glBindTexture(GL_TEXTURE_2D, texStand);
+    else if (state == 1)          glBindTexture(GL_TEXTURE_2D, texWalk);
+    else if (state == 3)          glBindTexture(GL_TEXTURE_2D, texBook);
+
+    glPushMatrix();
+    glTranslatef(x_pos, 0.02f, 0.0f); // موقع الشخصية عمودياً
+    glScalef(0.75f, 0.75f, 1.0f);
+
+    // رسم المربع بالأبعاد الأصلية لصورك (160x230)
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex2f(-0.2f, -0.35f);
+    glTexCoord2f(1.0f, 0.0f); glVertex2f(0.2f, -0.35f);
+    glTexCoord2f(1.0f, 1.0f); glVertex2f(0.2f, 0.35f);
+    glTexCoord2f(0.0f, 1.0f); glVertex2f(-0.2f, 0.35f);
+    glEnd();
+    glPopMatrix();
+    
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+    glEnable(GL_DEPTH_TEST);
+
+    glEnable(GL_DEPTH_TEST);
    
     // Dark transparent layer
     if (!lightOn) {
@@ -542,6 +595,15 @@ void display() {
 void init() {
     glEnable(GL_DEPTH_TEST);
     glClearColor(0.96f, 0.93f, 0.88f, 1.0f); //beige
+
+    // تفعيل الشفافية (البلندنج)
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    // --- هنا التعديل: تحميل الصور بأسماء الملفات مباشرة ---
+    texStand = loadTexture("s1.png");
+    texWalk = loadTexture("s2.png");
+    texBook = loadTexture("s3.png");
 }
 
 //projection is in display(); 
@@ -549,9 +611,46 @@ void reshape(int w, int h) {
     glViewport(0, 0, w, h);
 }
 
+// دالة التفاعل عبر لوحة المفاتيح
+void keyboard(unsigned char key, int x, int y) {
+   // عند الضغط على مفتاحb' ' أو ' B 'يتم تبديل حالة السبورة
+   if (key == 'b' || key == 'B') {
+       showScribble = !showScribble;
+       glutPostRedisplay(); // إعادة الرسم لتحديث المشهد
+   }
+    // تبديل الحالات عند ضغط زر R
+    if (key == 'r' || key == 'R') {
+        if (state == 0) state = 1;      // واقفة -> تمشي
+        else if (state == 2) state = 3; // وقفت بالوسط -> تمسك الكتاب
+    }
+   // مفتاح  'e' للخروج من البرنامج
+   if (key == 'e' || key == 'E') {
+       exit(0);
+   }
+}
+
+void mouse(int button, int state, int x, int y) {
+    if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) {
+        lightOn = !lightOn;
+        glutPostRedisplay();
+    }
+}
+
+void update(int value) {
+    if (state == 1) { // حالة المشي للوسط
+        x_pos += 0.005f; // سرعة الحركة
+        if (x_pos >= 0.0f) { // الوصول للوسط
+            x_pos = 0.0f;
+            state = 2; // قف واظهر s1 مرة أخرى
+        }
+    }
+    glutPostRedisplay(); // إعادة الرسم
+    glutTimerFunc(16, update, 0); // تكرار الاستدعاء
+}
+
 int main(int argc, char **argv) {
     glutInit(&argc, argv);
-    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);    
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);    
     glutInitWindowSize(1000, 500); 
     glutInitWindowPosition(100, 100);
     glutCreateWindow("Classroom");
@@ -562,6 +661,7 @@ int main(int argc, char **argv) {
     glutMouseFunc(mouse);
     glutKeyboardFunc(keyboard); // تسجيل دالة لوحة المفاتيح للتفاعل
     glutReshapeFunc(reshape);
+    glutTimerFunc(0, update, 0);
 
     glutMainLoop();
     return 0;
