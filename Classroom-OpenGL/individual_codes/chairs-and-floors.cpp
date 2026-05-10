@@ -147,7 +147,7 @@ void reshape(int w, int h) {
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
-    glutInitWindowSize(1024, 768);
+    glutInitWindowSize(1000, 500);
     glutInitWindowPosition(100, 50);
     glutCreateWindow("Taif University - Matching Platform");
 

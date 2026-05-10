@@ -35,7 +35,7 @@ GLuint loadTexture(const char* path) {
 
 void init() {
     // لون الخلفية
-    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
     // تفعيل التكستشر
     glEnable(GL_TEXTURE_2D);
