@@ -35,7 +35,7 @@ While my university classes focus heavily on development, my main career goal is
 
 * **Languages I know:** Java, Python, SQL, C++, HTML/CSS
 * **Tools I use:** Git, GitHub, VS Code, basic Linux
-* **What I'm learning next:** Web vulnerabilities, Burp Suite, and studying for my eJPTv2 certification.
+* **What I'm learning next:** Web vulnerabilities, Burp Suite, studying for my Security+ and later eJPTv2 certification.
 
 ---
 📫 **Connect with me:** https://www.linkedin.com/in/layan-alkhudaydi/
