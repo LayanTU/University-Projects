@@ -5,7 +5,7 @@
 #include <iostream>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include "stb_image.h" // تأكدي أن هذا الملف موجود في مجلد المشروع
+#include "stb_image.h"
 
 // معرفات التكستشر للصور الثلاث
 GLuint texStand, texWalk, texBook;
