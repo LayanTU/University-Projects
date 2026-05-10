@@ -23,6 +23,11 @@ Located in `/HealthyHabits-Web`
 * **Focus:** HTML & CSS
 * **Description:** A multi-page website focused on healthy living. I built the layout and design from scratch to practice structuring web pages, linking files, and making the site look clean and readable.
 
+### 4. Taif University Classroom Recreation
+* **Located in:** `/Classroom-OpenGL`
+* **Focus:** C++ & OpenGL (2D/3D Computer Graphics)
+* **Description:** An interactive 2D/3D scene recreating a university classroom. I utilized OpenGL primitives and matrix transformations to build the environment, and implemented state machine management to handle dynamic lighting, transparency blending, and 2D sprite animations within a 3D space.
+
 ---
 
 ## 🛠️ My Skills & Goals

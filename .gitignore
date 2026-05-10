@@ -26,7 +26,6 @@ node_modules/
 dist/
 
 # IDEs & Editor Workspaces
-.vscode/
 .idea/
 .vs/
 *.swp
